@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Countdown</string>
+
+    <string name="stop">Stop</string>
+</resources>
