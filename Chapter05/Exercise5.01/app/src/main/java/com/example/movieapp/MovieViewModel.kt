@@ -4,13 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-
 import com.example.movieapp.model.Movie
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 class MovieViewModel(private val movieRepository: MovieRepository, private val dispatcher: CoroutineDispatcher = Dispatchers.IO) : ViewModel() {
@@ -29,18 +25,10 @@ class MovieViewModel(private val movieRepository: MovieRepository, private val d
     fun fetchMovies() {
         _loading.value = true
         viewModelScope.launch(dispatcher) {
-            movieRepository.fetchMovies()
-            _loading.postValue(false)
-        }
-    }
-
-    fun fetchMoviesByFlow() {
-        viewModelScope.launch {
             movieRepository.fetchMoviesFlow()
-                .onStart { _loading.value = true }
-                .onCompletion { _loading.value = false }
                 .collect {
                     _movies.value = it
+                    _loading.value = false
                 }
         }
     }

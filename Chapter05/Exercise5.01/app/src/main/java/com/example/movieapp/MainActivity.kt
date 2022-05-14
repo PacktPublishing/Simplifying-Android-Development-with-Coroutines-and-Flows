@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
                 return MovieViewModel(movieRepository) as T
             }
         })[MovieViewModel::class.java]
-        movieViewModel.fetchMoviesByFlow()
+        movieViewModel.fetchMovies()
 
         movieViewModel.movies.observe(this) { movies ->
             movieAdapter.addMovies(movies)
