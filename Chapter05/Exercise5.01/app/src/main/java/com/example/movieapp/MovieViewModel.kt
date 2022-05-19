@@ -9,7 +9,10 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MovieViewModel(private val movieRepository: MovieRepository, private val dispatcher: CoroutineDispatcher = Dispatchers.IO) : ViewModel() {
+class MovieViewModel(
+    private val movieRepository: MovieRepository,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+) : ViewModel() {
     val movies: LiveData<List<Movie>>
         get() = _movies
     private val _movies = MutableLiveData(emptyList<Movie>())
@@ -27,8 +30,8 @@ class MovieViewModel(private val movieRepository: MovieRepository, private val d
         viewModelScope.launch(dispatcher) {
             movieRepository.fetchMoviesFlow()
                 .collect {
-                    _movies.value = it
-                    _loading.value = false
+                    _movies.postValue(it)
+                    _loading.postValue(false)
                 }
         }
     }
