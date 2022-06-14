@@ -8,9 +8,9 @@ import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
     private val scope = CoroutineScope(Dispatchers.Main)
-    private lateinit var job: Job
+    private var job: Job? = null
     private lateinit var textView: TextView
-    private var value = 100
+    private var count = 100
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         textView = findViewById(R.id.textView)
 
         job = scope.launch {
-            while (value > 0) {
+            while (count > 0) {
                 delay(100)
                 countdown()
             }
@@ -27,12 +27,12 @@ class MainActivity : AppCompatActivity() {
 
         val button = findViewById<Button>(R.id.button)
         button.setOnClickListener {
-            job.cancel()
+            job?.cancel()
         }
     }
 
     private fun countdown() {
-        value--
-        textView.text = value.toString()
+        count--
+        textView.text = count.toString()
     }
 }
