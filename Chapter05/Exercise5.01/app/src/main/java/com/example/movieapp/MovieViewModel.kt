@@ -1,37 +1,34 @@
 package com.example.movieapp
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.movieapp.model.Movie
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class MovieViewModel(
     private val movieRepository: MovieRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
-    val movies: LiveData<List<Movie>>
-        get() = _movies
-    private val _movies = MutableLiveData(emptyList<Movie>())
+    private val _movies = MutableStateFlow(emptyList<Movie>())
+    val movies: StateFlow<List<Movie>> = _movies
 
-    val error: LiveData<String>
-        get() = _error
-    private val _error = MutableLiveData<String>()
+    private val _error = MutableStateFlow("")
+    val error: StateFlow<String> = _error
 
-    val loading: LiveData<Boolean>
-        get() = _loading
-    private val _loading = MutableLiveData(true)
+    private val _loading = MutableStateFlow(true)
+    val loading: StateFlow<Boolean> = _loading
 
     fun fetchMovies() {
         _loading.value = true
         viewModelScope.launch(dispatcher) {
             movieRepository.fetchMoviesFlow()
                 .collect {
-                    _movies.postValue(it)
-                    _loading.postValue(false)
+                    _movies.value = it
+                    _loading.value = false
                 }
         }
     }

@@ -48,9 +48,9 @@ class MovieViewModelTest {
             val movieViewModel = MovieViewModel(movieRepository, dispatcher)
             movieViewModel.fetchMovies()
 
-            assertTrue(movieViewModel.loading.value == true)
+            assertTrue(movieViewModel.loading.value)
             dispatcher.scheduler.advanceUntilIdle()
-            assertFalse(movieViewModel.loading.value == true)
+            assertFalse(movieViewModel.loading.value)
         }
     }
 

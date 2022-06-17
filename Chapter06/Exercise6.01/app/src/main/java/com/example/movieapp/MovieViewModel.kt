@@ -7,37 +7,32 @@ import androidx.lifecycle.viewModelScope
 import com.example.movieapp.model.Movie
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class MovieViewModel(
     private val movieRepository: MovieRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
-    val movies: LiveData<List<Movie>>
-        get() = _movies
-    private val _movies = MutableLiveData(emptyList<Movie>())
+    private val _movies = MutableStateFlow(emptyList<Movie>())
+    val movies: StateFlow<List<Movie>> = _movies
 
-    val error: LiveData<String>
-        get() = _error
-    private val _error = MutableLiveData<String>()
+    private val _error = MutableStateFlow("")
+    val error: StateFlow<String> = _error
 
-    val loading: LiveData<Boolean>
-        get() = _loading
-    private val _loading = MutableLiveData(true)
+    private val _loading = MutableStateFlow(true)
+    val loading: StateFlow<Boolean> = _loading
 
     fun fetchMovies() {
         viewModelScope.launch(dispatcher) {
             movieRepository.fetchMoviesFlow()
-                .onStart { _loading.postValue(true) }
-                .onCompletion { _loading.postValue(false) }
+                .onStart { _loading.value = true }
+                .onCompletion { _loading.value = false }
                 .catch {
-                    _error.postValue("An exception occurred: ${it.message}")
+                    _error.value = "An exception occurred: ${it.message}"
                 }
                 .collect {
-                    _movies.postValue(it)
+                    _movies.value = it
                 }
         }
     }

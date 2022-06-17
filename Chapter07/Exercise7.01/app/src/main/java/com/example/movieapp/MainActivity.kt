@@ -4,10 +4,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ProgressBar
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private val movieAdapter by lazy {
@@ -29,16 +29,25 @@ class MainActivity : AppCompatActivity() {
         })[MovieViewModel::class.java]
         movieViewModel.fetchMovies()
 
-        movieViewModel.movies.observe(this) { movies ->
-            movieAdapter.addMovies(movies)
-        }
-        movieViewModel.error.observe(this) { error ->
-            Snackbar.make(recyclerView, error, Snackbar.LENGTH_LONG).show()
-        }
-
         val progressBar: ProgressBar = findViewById(R.id.progress_bar)
-        movieViewModel.loading.observe(this) { loading ->
-            progressBar.isVisible = loading
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    movieViewModel.movies.collect { movies ->
+                        movieAdapter.addMovies(movies)
+                    }
+                }
+                launch {
+                    movieViewModel.error.collect { error ->
+                        if (error.isNotEmpty()) Snackbar.make(recyclerView, error, Snackbar.LENGTH_LONG).show()
+                    }
+                }
+                launch {
+                    movieViewModel.loading.collect { loading ->
+                        progressBar.isVisible = loading
+                    }
+                }
+            }
         }
     }
 }
