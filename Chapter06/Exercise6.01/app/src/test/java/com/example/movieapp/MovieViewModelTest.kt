@@ -6,7 +6,7 @@ import com.example.movieapp.model.Movie
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
+import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.doReturn
@@ -39,9 +39,9 @@ class MovieViewModelTest {
             val movieViewModel = MovieViewModel(movieRepository, dispatcher)
             movieViewModel.fetchMovies()
 
-            assertEquals(true, movieViewModel.loading.value)
+            assertTrue(movieViewModel.loading.value == true)
             dispatcher.scheduler.advanceUntilIdle()
-            assertEquals(false, movieViewModel.loading.value)
+            assertFalse(movieViewModel.loading.value == true)
         }
     }
 
