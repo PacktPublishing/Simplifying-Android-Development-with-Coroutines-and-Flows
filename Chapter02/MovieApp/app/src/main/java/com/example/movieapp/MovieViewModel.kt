@@ -13,7 +13,7 @@ class MovieViewModel(private val movieRepository: MovieRepository) : ViewModel()
         get() = _loading
     private val _loading = MutableLiveData(true)
 
-    private fun fetchMovies() {
+    fun fetchMovies() {
         //TODO
     }
 }
