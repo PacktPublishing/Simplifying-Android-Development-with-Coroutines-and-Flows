@@ -51,11 +51,11 @@ With the following software and hardware list you can run all code files present
 * Kickstart Modern Android Development with Jetpack and Kotlin [[Packt]](https://www.packtpub.com/product/kickstart-modern-android-development-with-jetpack-and-kotlin/9781801811071) [[Amazon]](https://www.amazon.com/Kickstart-Modern-Android-Development-Jetpack/dp/1801811075)
 
 
-## Get to Know the Authors
+## Get to Know the Author
 
 **Jomar Tigcal**
 is an Android developer with over 10 years of experience in mobile and software development. He worked on various stages of app development for small startups to large companies. Jomar has also given talks and conducted training and workshops on Android. In his free time, he likes running and reading. He lives in Vancouver, Canada with his wife Celine.
 
 
-## Other books by the authors
+## Other books by the author
 * [How to Build Android Apps with Kotlin](https://www.packtpub.com/product/how-to-build-android-apps-with-kotlin/9781838984113?_ga=2.143249015.356192373.1658578087-861421203.1658578087)
